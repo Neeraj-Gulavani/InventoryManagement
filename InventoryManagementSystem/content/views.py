@@ -21,16 +21,24 @@ def add_view(request):
         assetCall = Asset(name=name,count=count,cost=cost,price=price)
         assetCall.save()
         return HttpResponseRedirect(reverse('content:index'))
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('login:index'))
     return render(request,'content/add.html')
 
 def edit_view(request,id):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login:index'))
-    item = Asset.objects.get(id=id)
+    
+    #item = Asset.objects.get(id=id)
+    item = get_object_or_404(Asset, id=id)
+    if request.method=="POST":
+        item.name = request.POST["nameInput"]
+        item.count = request.POST["countInput"]
+        item.cost = request.POST["costInput"]
+        item.price=request.POST["priceInput"]
+        item.save()
+        return HttpResponseRedirect(reverse('content:index'))
+
     if item:
-        return render(request,'content/edit.html/',{
+        return render(request,'content/edit.html',{
             "item": item
         })
         
