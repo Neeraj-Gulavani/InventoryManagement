@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
-        <form action="{% url 'content:add_view' %}" method="post" class="p-5 rounded shadow bg-white" style="width: 400px;">
+        <form action="{% url 'content:edit_view' item.id%}" method="post" class="p-5 rounded shadow bg-white" style="width: 400px;">
             {% csrf_token %}
             <h2 class="text-center mb-4">Edit Product</h2> 
             <div class="mb-3">
@@ -21,12 +21,12 @@
                 <input type="number" name="countInput" class="form-control" id="countInput" placeholder="Enter Quantity" value="{{item.count}}">
             </div>
             <div class="mb-3">
-                <label for="costInput" class="form-label">Cost Price Per Piece</label>
-                <input type="number" name="costInput" class="form-control" id="costInput" placeholder="Enter Cost Price" value="{{item.cost}}">
+                <label for="costInput"  class="form-label">Cost Price Per Piece</label>
+                <input type="number" step="any" name="costInput" class="form-control" id="costInput" placeholder="Enter Cost Price" value="{{item.cost}}">
             </div>
             <div class="mb-3">
                 <label for="priceInput" class="form-label">Sale Price Per Piece</label>
-                <input type="number" name="priceInput" class="form-control" id="priceInput" placeholder="Enter Sale Price" value="{{item.price}}">
+                <input type="number" step="any" name="priceInput" class="form-control" id="priceInput" placeholder="Enter Sale Price" value="{{item.price}}">
             </div>
             <button type="submit" class="btn btn-primary w-100">Submit</button>
         </form>
