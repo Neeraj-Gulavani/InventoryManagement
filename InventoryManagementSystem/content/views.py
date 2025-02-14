@@ -7,7 +7,7 @@ def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login:index'))
     return render(request,'content/index.html', {
-        "inventory": Asset.objects.all()
+        "inventory": Asset.objects.filter(user=request.user)
     })
 
 def add_view(request):
@@ -18,7 +18,7 @@ def add_view(request):
         count = request.POST["countInput"]
         cost = request.POST["costInput"]
         price=request.POST["priceInput"]
-        assetCall = Asset(name=name,count=count,cost=cost,price=price)
+        assetCall = Asset(user=request.user,name=name,count=count,cost=cost,price=price)
         assetCall.save()
         return HttpResponseRedirect(reverse('content:index'))
     return render(request,'content/add.html')
@@ -28,7 +28,7 @@ def edit_view(request,id):
         return HttpResponseRedirect(reverse('login:index'))
     
     #item = Asset.objects.get(id=id)
-    item = get_object_or_404(Asset, id=id)
+    item = get_object_or_404(Asset, id=id,user=request.user)
     if request.method=="POST":
         item.name = request.POST["nameInput"]
         item.count = request.POST["countInput"]
