@@ -1,13 +1,20 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.core.paginator import Paginator
 from .models import Asset
+from django.contrib import messages
 # Create your views here.
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login:index'))
+    inventory = Asset.objects.filter(user=request.user)
+    
+    paginator = Paginator(inventory,5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     return render(request,'content/index.html', {
-        "inventory": Asset.objects.filter(user=request.user)
+        "inventory": page_obj
     })
 
 def add_view(request):
@@ -35,6 +42,7 @@ def edit_view(request,id):
         item.cost = request.POST["costInput"]
         item.price=request.POST["priceInput"]
         item.save()
+        messages.success(request,"Successfully Edited " + item.name)
         return HttpResponseRedirect(reverse('content:index'))
 
     if item:
@@ -46,15 +54,11 @@ def edit_view(request,id):
 def delete_view(request,id):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login:index'))
-    item = Asset.objects.filter(id=id).first()
+    item = Asset.objects.filter(id=id,user=request.user).first()
     if item:
         item.delete()
-        return render(request,'content/index.html', {
-        "inventory": Asset.objects.all(),
-        "message": "Successfully Deleted the item"
-            })
+        messages.success(request, "Successfully deleted " + item.name)
+        return HttpResponseRedirect(reverse('content:index'))
     else:
-        return render(request,'content/index.html', {
-        "inventory": Asset.objects.all(),
-        "message": "Couldn't Delete the item"
-            })
+        messages.error(request,"Failed to Delete.")
+        return HttpResponseRedirect(reverse('content:index'))

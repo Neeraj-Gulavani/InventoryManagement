@@ -5,11 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <title>Inventory Management System</title>
+    <title>Inventory Management System - Edit Product</title>
+    <style>
+        body {
+           /* background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); */
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        
+        }
+        form {
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: transform 0.3s;
+        }
+
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            font-weight: 600;
+        }
+        .form-label {
+            font-weight: 500;
+        }
+        .form-control {
+            border-radius: 10px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+        button {
+            background-color: #2575fc;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #6a11cb;
+        }
+    </style>
 </head>
 <body>
-    <div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
-        <form action="{% url 'content:edit_view' item.id%}" method="post" class="p-5 rounded shadow bg-white" style="width: 400px;">
+    <div class="d-flex justify-content-center align-items-center min-vh-100">
+        <form action="{% url 'content:edit_view' item.id%}" method="post" class="w-100" style="max-width: 500px;">
             {% csrf_token %}
             <h2 class="text-center mb-4">Edit Product</h2> 
             <div class="mb-3">
@@ -21,7 +62,7 @@
                 <input type="number" name="countInput" class="form-control" id="countInput" placeholder="Enter Quantity" value="{{item.count}}">
             </div>
             <div class="mb-3">
-                <label for="costInput"  class="form-label">Cost Price Per Piece</label>
+                <label for="costInput" class="form-label">Cost Price Per Piece</label>
                 <input type="number" step="any" name="costInput" class="form-control" id="costInput" placeholder="Enter Cost Price" value="{{item.cost}}">
             </div>
             <div class="mb-3">
